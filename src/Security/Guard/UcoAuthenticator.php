@@ -77,12 +77,7 @@ class UcoAuthenticator extends SocialAuthenticator
         assert($userResource instanceof UcoResourceOwner);
         $userResourceId = $userResource->getId();
 
-        $user = $this->userRepository->findOneBy(['username' => $userResourceId]);
-        if (! $user) {
-            throw new AuthenticationException("${userResourceId} not found");
-        }
-
-        return $user;
+        return $this->userRepository->findOneBy(['username' => $userResourceId]);
     }
 
     /**

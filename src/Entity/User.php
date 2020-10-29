@@ -4,10 +4,13 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"username"})
  */
 class User implements UserInterface
 {
@@ -20,18 +23,16 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Length(min=1, max=180)
      */
     private $username;
 
     /**
      * @ORM\Column(type="json")
+     * @Assert\Choice({"ROLE_USER", "ROLE_ADMIN", "ROLE_SUPER_USER"})
      */
     private $roles = [];
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isAdmin;
 
     public function __toString(): string
     {
@@ -84,7 +85,6 @@ class User implements UserInterface
      */
     public function getPassword()
     {
-        // not needed for apps that do not check user passwords
     }
 
     /**
@@ -92,7 +92,6 @@ class User implements UserInterface
      */
     public function getSalt()
     {
-        // not needed for apps that do not check user passwords
     }
 
     /**
@@ -100,19 +99,5 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
-
-    public function getIsAdmin(): ?bool
-    {
-        return $this->isAdmin;
-    }
-
-    public function setIsAdmin(bool $isAdmin): self
-    {
-        $this->isAdmin = $isAdmin;
-
-        return $this;
     }
 }

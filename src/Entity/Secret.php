@@ -4,9 +4,12 @@ namespace App\Entity;
 
 use App\Repository\SecretRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SecretRepository::class)
+ * @UniqueEntity(fields={"site", "account"})
  */
 class Secret
 {
@@ -19,22 +22,30 @@ class Secret
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(min=1, max=255)
      */
     private $site;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(min=1, max=255)
      */
     private $account;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(min=1, max=255)
      */
     private $password;
 
     /**
      * @ORM\ManyToOne(targetEntity=OrganizationUnit::class)
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @Assert\NotBlank()
+     * @Assert\Valid()
      */
     private $organizationUnit;
 
