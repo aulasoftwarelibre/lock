@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -12,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"username"})
  */
-class User implements UserInterface
+class User implements UserInterface, TwoFactorInterface
 {
     /**
      * @ORM\Id
@@ -28,11 +29,30 @@ class User implements UserInterface
      */
     private $username;
 
+
+    /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Length(min=1, max=180)
+     * @Assert\Email()
+     */
+    private $email;
+
     /**
      * @ORM\Column(type="json")
-     * @Assert\Choice({"ROLE_USER", "ROLE_ADMIN", "ROLE_SUPER_USER"})
+     * @Assert\Choice({"ROLE_USER", "ROLE_ADMIN", "ROLE_SUPER_ADMIN"}, multiple=true)
      */
     private $roles = [];
+
+    /**
+     * @ORM\Column(name="googleAuthenticatorSecret", type="string", nullable=true)
+     */
+    private ?string $googleAuthenticatorSecret;
+
+    /**
+     * @ORM\Column(name="googleActivationSecret", type="string", nullable=true)
+     */
+    private ?string $googleActivationSecret;
 
     public function __toString(): string
     {
@@ -57,6 +77,21 @@ class User implements UserInterface
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }
@@ -99,5 +134,43 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
+    }
+
+    public function isGoogleAuthenticatorEnabled(): bool
+    {
+        return $this->googleAuthenticatorSecret ? true : false;
+    }
+
+    public function getGoogleAuthenticatorUsername(): string
+    {
+        return $this->username;
+    }
+
+    public function getGoogleAuthenticatorSecret(): ?string
+    {
+        return $this->googleAuthenticatorSecret;
+    }
+
+    public function setGoogleAuthenticatorSecret(string $googleAuthenticatorSecret): self
+    {
+        $this->googleAuthenticatorSecret = $googleAuthenticatorSecret;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getGoogleActivationSecret(): ?string
+    {
+        return $this->googleActivationSecret;
+    }
+
+    /**
+     * @param string|null $googleActivationSecret
+     */
+    public function setGoogleActivationSecret(?string $googleActivationSecret): void
+    {
+        $this->googleActivationSecret = $googleActivationSecret;
     }
 }

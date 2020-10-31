@@ -1,0 +1,55 @@
+{% extends '@EasyAdmin/page/login.html.twig' %}
+
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block wrapper_wrapper %}
+    {% set page_title = block('page_title') %}
+    {% set _submit_label = submit_label is defined ? submit_label|trans : 'Enviar'|trans %}
+
+    <div class="login-wrapper">
+        <header class="main-header mb-4">
+            <div id="header-logo">
+                {% block header_logo %}
+                    {% if page_title %}
+                        {% if ea is defined %}
+                            <a class="logo {{ page_title|length > 14 ? 'logo-long' }}" title="{{ page_title|striptags }}" href="{{ path(ea.dashboardRouteName) }}">
+                                {{ page_title|raw }}
+                            </a>
+                        {% else %}
+                            <div class="logo {{ page_title|length > 14 ? 'logo-long' }}">
+                                {{ page_title|raw }}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endblock header_logo %}
+            </div>
+        </header>
+
+        {% if error|default(false) %}
+            <div class="w-100 alert alert-danger">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        <section class="content">
+            <p>Escanee el siguiente código con su aplicación móvil e introduzca el código OTP para activar su cuenta:</p>
+            <img width="200" src="data:image/png;base64,{{- qrcode -}}" alt="Código QR">
+            {{ form_start(form) }}
+
+            <div class="form-group field-code">
+                {{ form_label(form.code) }}
+                <div class="form-widget form-widget-with-icon">
+                    <i class="fa fa-fw fa-lock"></i>
+                    {{ form_widget(form.code) }}
+                </div>
+            </div>
+
+            <div class="form-group field-button">
+                <button type="submit" class="btn btn-primary btn-lg btn-block" onclick="this.form.submit();">{{ _submit_label }}</button>
+            </div>
+
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </section>
+    </div>
+{% endblock %}

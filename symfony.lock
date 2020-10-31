@@ -1,9 +1,18 @@
 {
+    "bacon/bacon-qr-code": {
+        "version": "2.0.3"
+    },
+    "beberlei/assert": {
+        "version": "v3.2.7"
+    },
     "brick/math": {
         "version": "0.9.1"
     },
     "composer/package-versions-deprecated": {
         "version": "1.11.99"
+    },
+    "dasprid/enum": {
+        "version": "1.0.3"
     },
     "doctrine/annotations": {
         "version": "1.0",
@@ -93,6 +102,9 @@
     "egulias/email-validator": {
         "version": "2.1.22"
     },
+    "endroid/qr-code": {
+        "version": "3.9.3"
+    },
     "fgrosse/phpasn1": {
         "version": "v2.2.0"
     },
@@ -107,6 +119,9 @@
     },
     "informaticauco/oauth2-uco": {
         "version": "0.5.0"
+    },
+    "khanamiryan/qrcode-detector-decoder": {
+        "version": "1.0.3"
     },
     "knpuniversity/oauth2-client-bundle": {
         "version": "1.20",
@@ -126,17 +141,29 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.1.1"
     },
+    "lcobucci/jwt": {
+        "version": "3.3.3"
+    },
     "league/oauth2-client": {
         "version": "2.6.0"
     },
+    "lorenzo/pinky": {
+        "version": "1.0.5"
+    },
     "monolog/monolog": {
         "version": "2.1.1"
+    },
+    "myclabs/php-enum": {
+        "version": "1.7.6"
     },
     "nikic/php-parser": {
         "version": "v4.10.2"
     },
     "ocramius/proxy-manager": {
         "version": "2.8.0"
+    },
+    "paragonie/constant_time_encoding": {
+        "version": "v2.3.0"
     },
     "php": {
         "version": "7.4"
@@ -177,6 +204,9 @@
     "ralouphie/getallheaders": {
         "version": "3.0.3"
     },
+    "scheb/2fa": {
+        "version": "v5.1.2"
+    },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
         "recipe": {
@@ -194,6 +224,12 @@
     },
     "spomky-labs/base64url": {
         "version": "v2.0.3"
+    },
+    "spomky-labs/otphp": {
+        "version": "v10.0.1"
+    },
+    "symfony/amqp-messenger": {
+        "version": "v5.1.8"
     },
     "symfony/asset": {
         "version": "v5.1.8"
@@ -247,6 +283,9 @@
         "version": "v2.2.0"
     },
     "symfony/doctrine-bridge": {
+        "version": "v5.1.8"
+    },
+    "symfony/doctrine-messenger": {
         "version": "v5.1.8"
     },
     "symfony/dom-crawler": {
@@ -344,6 +383,18 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
+    "symfony/messenger": {
+        "version": "4.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.3",
+            "ref": "8a2675c061737658bed85102e9241c752620e575"
+        },
+        "files": [
+            "config/packages/messenger.yaml"
+        ]
+    },
     "symfony/mime": {
         "version": "v5.1.8"
     },
@@ -432,6 +483,9 @@
         "version": "v5.1.8"
     },
     "symfony/property-info": {
+        "version": "v5.1.8"
+    },
+    "symfony/redis-messenger": {
         "version": "v5.1.8"
     },
     "symfony/routing": {
@@ -571,7 +625,16 @@
     "thecodingmachine/safe": {
         "version": "v1.3.3"
     },
+    "tijsverkoyen/css-to-inline-styles": {
+        "version": "2.2.3"
+    },
+    "twig/cssinliner-extra": {
+        "version": "v3.1.1"
+    },
     "twig/extra-bundle": {
+        "version": "v3.1.1"
+    },
+    "twig/inky-extra": {
         "version": "v3.1.1"
     },
     "twig/twig": {

@@ -1,0 +1,62 @@
+{% extends '@EasyAdmin/page/login.html.twig' %}
+
+
+{% block wrapper_wrapper %}
+    {% set page_title = block('page_title') %}
+    {% set _sign_in_label = sign_in_label is defined ? sign_in_label|trans : 'login_page.sign_in'|trans({}, 'EasyAdminBundle') %}
+
+    <div class="login-wrapper">
+        <header class="main-header mb-4">
+            <div id="header-logo">
+                {% block header_logo %}
+                    {% if page_title %}
+                        {% if ea is defined %}
+                            <a class="logo {{ page_title|length > 14 ? 'logo-long' }}" title="{{ page_title|striptags }}" href="{{ path(ea.dashboardRouteName) }}">
+                                {{ page_title|raw }}
+                            </a>
+                        {% else %}
+                            <div class="logo {{ page_title|length > 14 ? 'logo-long' }}">
+                                {{ page_title|raw }}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endblock header_logo %}
+            </div>
+        </header>
+
+        {% if authenticationError|default(false) %}
+            <div class="w-100 alert alert-danger">
+                {{ authenticationError|trans(authenticationErrorData, 'SchebTwoFactorBundle') }}
+            </div>
+        {% endif %}
+
+        <section class="content">
+            <p class="label"><label for="_auth_code">{{ "auth_code"|trans({}, 'SchebTwoFactorBundle') }} {{ twoFactorProvider }}:</label></p>
+
+            <form class="form" action="{{ checkPathUrl ? checkPathUrl: path(checkPathRoute) }}" method="post">
+                <p class="widget">
+                    <input
+                        id="_auth_code"
+                        type="text"
+                        name="{{ authCodeParameterName }}"
+                        autocomplete="one-time-code"
+                        autofocus
+                        inputmode="numeric"
+                        pattern="[0-9]*"
+                    />
+                </p>
+
+                {% if displayTrustedOption %}
+                    <p class="widget"><label for="_trusted"><input id="_trusted" type="checkbox" name="{{ trustedParameterName }}" /> {{ "trusted"|trans({}, 'SchebTwoFactorBundle') }}</label></p>
+                {% endif %}
+                {% if isCsrfProtectionEnabled %}
+                    <input type="hidden" name="{{ csrfParameterName }}" value="{{ csrf_token(csrfTokenId) }}">
+                {% endif %}
+                <p class="submit"><input class="btn btn-primary btn-lg btn-block" type="submit" value="{{ "login"|trans({}, 'SchebTwoFactorBundle') }}" /></p>
+            </form>
+
+            {# The logout link gives the user a way out if they can't complete two-factor authentication #}
+            <p class="cancel"><a class="btn btn-danger btn-lg btn-block" href="{{ logoutPath }}">{{ "cancel"|trans({}, 'SchebTwoFactorBundle') }}</a></p>
+        </section>
+    </div>
+{% endblock %}
