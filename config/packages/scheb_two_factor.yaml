@@ -1,0 +1,9 @@
+scheb_two_factor:
+    security_tokens:
+        - Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken
+    google:
+        enabled: true
+        server_name: locker.aulasoftwarelibre.uco.es
+        issuer: Locker
+        window: 1
+        template: security/2fa_form.html.twig
