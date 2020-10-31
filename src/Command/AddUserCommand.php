@@ -3,33 +3,41 @@
 namespace App\Command;
 
 use App\Entity\User;
+use App\Message\SendNewActivationCodeMessage;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class AddUserCommand extends Command
 {
     protected static $defaultName = 'app:add-user';
-    /**
-     * @var EntityManagerInterface
-     */
-    private EntityManagerInterface $em;
-    /**
-     * @var UserRepository
-     */
-    private UserRepository $userRepository;
 
-    public function __construct(EntityManagerInterface $em, UserRepository $userRepository)
+    private EntityManagerInterface $em;
+    private UserRepository $userRepository;
+    private MessageBusInterface $messageBus;
+    private GoogleAuthenticatorInterface $googleAuthenticator;
+
+    public function __construct(
+        EntityManagerInterface $em,
+        UserRepository $userRepository,
+        GoogleAuthenticatorInterface $googleAuthenticator,
+        MessageBusInterface $messageBus
+    )
     {
         parent::__construct();
 
         $this->em = $em;
         $this->userRepository = $userRepository;
+        $this->googleAuthenticator = $googleAuthenticator;
+        $this->messageBus = $messageBus;
     }
 
     protected function configure()
@@ -61,8 +69,12 @@ class AddUserCommand extends Command
             return Command::FAILURE;
         }
 
+        $secret = $this->googleAuthenticator->generateSecret();
+
         $user = new User();
         $user->setUsername($username);
+        $user->setEmail($username . '@uco.es');
+        $user->setGoogleAuthenticatorSecret($secret);
 
         if ($input->hasOption('admin')) {
             $user->setRoles(['ROLE_ADMIN']);
@@ -74,6 +86,10 @@ class AddUserCommand extends Command
 
         $this->em->persist($user);
         $this->em->flush();
+
+        $this->messageBus->dispatch(
+            new SendNewActivationCodeMessage($username)
+        );
 
         $io->success('User was created.');
 
