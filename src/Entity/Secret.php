@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\SecretRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,7 +23,7 @@ class Secret
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private ?int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -29,7 +31,7 @@ class Secret
      * @Assert\NotBlank()
      * @Assert\Length(min=1, max=255)
      */
-    private ?string $site;
+    private ?string $site = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -37,7 +39,7 @@ class Secret
      * @Assert\NotBlank()
      * @Assert\Length(min=1, max=255)
      */
-    private ?string $account;
+    private ?string $account = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -45,16 +47,19 @@ class Secret
      * @Assert\NotBlank()
      * @Assert\Length(min=1, max=255)
      */
-    private ?string $password;
+    private ?string $password = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity=OrganizationUnit::class)
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @ORM\ManyToMany(targetEntity=OrganizationUnit::class)
      *
-     * @Assert\NotBlank()
-     * @Assert\Valid()
+     * @var Collection<int, OrganizationUnit>
      */
-    private ?OrganizationUnit $organizationUnit;
+    private Collection $organizations;
+
+    public function __construct()
+    {
+        $this->organizations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -97,14 +102,26 @@ class Secret
         return $this;
     }
 
-    public function getOrganizationUnit(): ?OrganizationUnit
+    /**
+     * @return Collection<int, OrganizationUnit>
+     */
+    public function getOrganizations(): Collection
     {
-        return $this->organizationUnit;
+        return $this->organizations;
     }
 
-    public function setOrganizationUnit(OrganizationUnit $organizationUnit): self
+    public function addOrganization(OrganizationUnit $organization): self
     {
-        $this->organizationUnit = $organizationUnit;
+        if (! $this->organizations->contains($organization)) {
+            $this->organizations[] = $organization;
+        }
+
+        return $this;
+    }
+
+    public function removeOrganization(OrganizationUnit $organization): self
+    {
+        $this->organizations->removeElement($organization);
 
         return $this;
     }

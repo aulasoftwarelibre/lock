@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Secret;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +20,24 @@ class SecretRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Secret::class);
+    }
+
+    public function userHasAccessToSecret(Secret $secret, User $user): bool
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->leftJoin('s.organizations', 'p')
+            ->leftJoin('p.members', 'm')
+            ->where('s = :secret')
+            ->andWhere('m = :member')
+            ->setParameter('secret', $secret)
+            ->setParameter('member', $user);
+
+        $result = $qb
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return $result instanceof Secret;
     }
 
     // /**
