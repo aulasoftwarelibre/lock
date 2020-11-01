@@ -54,8 +54,7 @@ class UserCrudController extends AbstractCrudController
             ->allowMultipleChoices()
             ->setChoices([
                 'Usuario' => 'ROLE_USER',
-                'Delegado' => 'ROLE_ADMIN',
-                'Administrador' => 'ROLE_SUPER_ADMIN',
+                'Administrador' => 'ROLE_ADMIN',
             ]);
 
         yield BooleanField::new('isGoogleAuthenticatorActivated')
