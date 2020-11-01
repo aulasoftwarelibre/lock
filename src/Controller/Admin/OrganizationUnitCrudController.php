@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
@@ -22,6 +23,7 @@ class OrganizationUnitCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
+            ->setEntityPermission('ORGANIZATION_UNIT_MEMBER')
             ->setEntityLabelInSingular('Grupo')
             ->setEntityLabelInPlural('Grupos')
         ;
@@ -47,7 +49,13 @@ class OrganizationUnitCrudController extends AbstractCrudController
         yield TextField::new('name')
             ->setLabel('Nombre')
         ;
-        yield AssociationField::new('members')
+
+        $component = $pageName === Action::DETAIL
+            ? ArrayField::new('members')
+            : AssociationField::new('members')
+        ;
+
+        yield $component
             ->setLabel('Miembros')
         ;
     }
