@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\UserRepository;
@@ -9,8 +11,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use function array_unique;
+
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ *
  * @UniqueEntity(fields={"username"})
  */
 class User implements UserInterface, TwoFactorInterface
@@ -20,38 +25,38 @@ class User implements UserInterface, TwoFactorInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     *
      * @Assert\NotBlank()
      * @Assert\Length(min=1, max=180)
      */
-    private $username;
-
+    private ?string $username;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     *
      * @Assert\NotBlank()
      * @Assert\Length(min=1, max=180)
      * @Assert\Email()
      */
-    private $email;
+    private ?string $email;
 
     /**
      * @ORM\Column(type="json")
+     *
      * @Assert\Choice({"ROLE_USER", "ROLE_ADMIN", "ROLE_SUPER_ADMIN"}, multiple=true)
+     *
+     * @var string[]
      */
-    private $roles = [];
+    private array $roles = [];
 
-    /**
-     * @ORM\Column(name="googleAuthenticatorSecret", type="string", nullable=true)
-     */
+    /** @ORM\Column(name="googleAuthenticatorSecret", type="string", nullable=true) */
     private ?string $googleAuthenticatorSecret;
 
-    /**
-     * @ORM\Column(name="googleActivationSecret", type="string", nullable=true)
-     */
+    /** @ORM\Column(name="googleActivationSecret", type="string", nullable=true) */
     private ?string $googleActivationSecret;
 
     public function __toString(): string
@@ -81,10 +86,7 @@ class User implements UserInterface, TwoFactorInterface
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -97,7 +99,7 @@ class User implements UserInterface, TwoFactorInterface
     }
 
     /**
-     * @see UserInterface
+     * @return string[]
      */
     public function getRoles(): array
     {
@@ -108,6 +110,9 @@ class User implements UserInterface, TwoFactorInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param string[] $roles
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -118,27 +123,27 @@ class User implements UserInterface, TwoFactorInterface
     /**
      * @see UserInterface
      */
-    public function getPassword()
+    public function getPassword(): void
     {
     }
 
     /**
      * @see UserInterface
      */
-    public function getSalt()
+    public function getSalt(): void
     {
     }
 
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 
     public function isGoogleAuthenticatorEnabled(): bool
     {
-        return $this->googleAuthenticatorSecret ? true : false;
+        return (bool) $this->googleAuthenticatorSecret;
     }
 
     public function getGoogleAuthenticatorUsername(): string
@@ -158,17 +163,11 @@ class User implements UserInterface, TwoFactorInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getGoogleActivationSecret(): ?string
     {
         return $this->googleActivationSecret;
     }
 
-    /**
-     * @param string|null $googleActivationSecret
-     */
     public function setGoogleActivationSecret(?string $googleActivationSecret): void
     {
         $this->googleActivationSecret = $googleActivationSecret;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\SecretRepository;
@@ -9,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SecretRepository::class)
+ *
  * @UniqueEntity(fields={"site", "account"})
  */
 class Secret
@@ -18,36 +21,40 @@ class Secret
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
      * @Assert\NotBlank()
      * @Assert\Length(min=1, max=255)
      */
-    private $site;
+    private ?string $site;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
      * @Assert\NotBlank()
      * @Assert\Length(min=1, max=255)
      */
-    private $account;
+    private ?string $account;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
      * @Assert\NotBlank()
      * @Assert\Length(min=1, max=255)
      */
-    private $password;
+    private ?string $password;
 
     /**
      * @ORM\ManyToOne(targetEntity=OrganizationUnit::class)
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     *
      * @Assert\NotBlank()
      * @Assert\Valid()
      */
-    private $organizationUnit;
+    private ?OrganizationUnit $organizationUnit;
 
     public function getId(): ?int
     {
@@ -95,7 +102,7 @@ class Secret
         return $this->organizationUnit;
     }
 
-    public function setOrganizationUnit(?OrganizationUnit $organizationUnit): self
+    public function setOrganizationUnit(OrganizationUnit $organizationUnit): self
     {
         $this->organizationUnit = $organizationUnit;
 

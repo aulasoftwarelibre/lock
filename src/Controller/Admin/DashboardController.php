@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin;
 
 use App\Entity\OrganizationUnit;
@@ -14,12 +16,19 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
+    private CrudUrlGenerator $crudUrlGenerator;
+
+    public function __construct(CrudUrlGenerator $crudUrlGenerator)
+    {
+        $this->crudUrlGenerator = $crudUrlGenerator;
+    }
+
     /**
      * @Route("/admin", name="admin")
      */
     public function index(): Response
     {
-        $routeBuilder = $this->get(CrudUrlGenerator::class)->build();
+        $routeBuilder = $this->crudUrlGenerator->build();
 
         return $this->redirect($routeBuilder->setController(UserCrudController::class)->generateUrl());
     }
@@ -30,6 +39,9 @@ class DashboardController extends AbstractDashboardController
             ->setTitle('Lock');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linktoDashboard('Dashboard', 'fa fa-home');

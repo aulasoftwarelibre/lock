@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin;
 
 use App\Entity\Secret;
@@ -13,13 +15,16 @@ class SecretCrudController extends AbstractCrudController
         return Secret::class;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function configureFields(string $pageName): iterable
     {
         return [
-            "site",
-            "account",
-            "password",
-            AssociationField::new("organizationUnit")
+            'site',
+            'account',
+            'password',
+            AssociationField::new('organizationUnit'),
         ];
     }
 }

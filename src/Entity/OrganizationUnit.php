@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\OrganizationUnitRepository;
@@ -19,20 +21,24 @@ class OrganizationUnit
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
      * @Assert\NotBlank()
      * @Assert\Length(min=1, max=255)
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class)
+     *
      * @Assert\Valid()
+     *
+     * @var Collection<int, User>
      */
-    private $members;
+    private Collection $members;
 
     public function __construct()
     {
@@ -71,7 +77,7 @@ class OrganizationUnit
 
     public function addMember(User $member): self
     {
-        if (!$this->members->contains($member)) {
+        if (! $this->members->contains($member)) {
             $this->members[] = $member;
         }
 

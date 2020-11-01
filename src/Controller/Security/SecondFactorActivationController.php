@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Controller\Security;
-
 
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -16,29 +16,20 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
+use function base64_encode;
 
 /**
  * @Route(path="/2fa_activation", name="2fa_login_activation", methods={"GET", "POST"})
  */
 class SecondFactorActivationController extends AbstractController
 {
-    /**
-     * @var QrCodeGenerator
-     */
     private QrCodeGenerator $qrCodeGenerator;
-    /**
-     * @var UserRepository
-     */
     private UserRepository $userRepository;
-    /**
-     * @var EntityManagerInterface
-     */
     private EntityManagerInterface $em;
     private string $assetsPath;
-    /**
-     * @var GoogleAuthenticatorInterface
-     */
     private GoogleAuthenticatorInterface $googleAuthenticator;
 
     public function __construct(
@@ -47,28 +38,27 @@ class SecondFactorActivationController extends AbstractController
         UserRepository $userRepository,
         EntityManagerInterface $em,
         string $assetsPath
-    )
-    {
-        $this->qrCodeGenerator = $qrCodeGenerator;
-        $this->userRepository = $userRepository;
-        $this->em = $em;
-        $this->assetsPath = $assetsPath;
+    ) {
+        $this->qrCodeGenerator     = $qrCodeGenerator;
+        $this->userRepository      = $userRepository;
+        $this->em                  = $em;
+        $this->assetsPath          = $assetsPath;
         $this->googleAuthenticator = $googleAuthenticator;
     }
 
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
-        $user = $this->findUserToBeActivated($request);
+        $user               = $this->findUserToBeActivated($request);
         $qrcodeEncodedImage = $this->generateQrCode($user);
 
         $form = $this->createActivationForm($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $code = $form->getData()['code'] ?? "";
+            $code = $form->getData()['code'] ?? '';
 
             $codeIsValid = $this->googleAuthenticator->checkCode($user, $code);
 
-            if (!$codeIsValid) {
+            if (! $codeIsValid) {
                 $form->get('code')->addError(new FormError('El código no es válido'));
 
                 return $this->render('security/2fa_activation.html.twig', [
@@ -94,12 +84,12 @@ class SecondFactorActivationController extends AbstractController
     {
         $code = $request->get('code');
 
-        if (!$code) {
+        if (! $code) {
             throw new BadRequestException('Missing code parameter');
         }
 
         $user = $this->userRepository->findOneBy(['googleActivationSecret' => $code]);
-        if (!$user) {
+        if (! $user) {
             throw new BadRequestException('Invalid code parameter');
         }
 
@@ -123,9 +113,7 @@ class SecondFactorActivationController extends AbstractController
             ->add('code', TextType::class, [
                 'required' => true,
                 'label' => false,
-                'attr' => [
-                    'placeholder' => 'Introduzca el código',
-                ]
+                'attr' => ['placeholder' => 'Introduzca el código'],
             ])
             ->getForm();
         $form->handleRequest($request);

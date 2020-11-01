@@ -1,0 +1,46 @@
+name: CI-CD
+
+on: [ push, pull_request ]
+
+jobs:
+    quality:
+        name: Quality
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                php: [ '7.4' ]
+
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v2
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    coverage: "none"
+                    extensions: "json,openssl,mbstring,xml,ctype,iconv,intl"
+                    ini-values: "memory_limit=-1"
+                    php-version: "${{ matrix.php }}"
+                    tools: composer, prestissimo
+
+            -   name: Determine composer cache directory
+                id: composer-cache
+                run: echo "::set-output name=directory::$(composer config cache-dir)"
+
+            -   name: Cache composer dependencies
+                uses: actions/cache@v1
+                with:
+                    path: ${{ steps.composer-cache.outputs.directory }}
+                    key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: ${{ matrix.php }}-composer-
+
+            -   name: Install Composer dependencies
+                run: |
+                    composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader --ansi
+
+            -   name: Quality
+                run: |
+                    vendor/bin/security-checker security:check
+                    vendor/bin/psalm
+                    vendor/bin/phpcs
