@@ -25,8 +25,7 @@ class OrganizationUnitCrudController extends AbstractCrudController
         return $crud
             ->setEntityPermission('ORGANIZATION_UNIT_MEMBER')
             ->setEntityLabelInSingular('Grupo')
-            ->setEntityLabelInPlural('Grupos')
-        ;
+            ->setEntityLabelInPlural('Grupos');
     }
 
     public function configureActions(Actions $actions): Actions
@@ -36,10 +35,8 @@ class OrganizationUnitCrudController extends AbstractCrudController
             ->setPermission(Action::EDIT, 'ROLE_ADMIN')
             ->setPermission(Action::DETAIL, 'ROLE_USER')
             ->setPermission(Action::NEW, 'ROLE_ADMIN')
-            ->setPermission(Action::DELETE, 'ROLE_ADMIN')
-        ;
+            ->setPermission(Action::DELETE, 'ROLE_ADMIN');
     }
-
 
     /**
      * {@inheritdoc}
@@ -47,16 +44,13 @@ class OrganizationUnitCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield TextField::new('name')
-            ->setLabel('Nombre')
-        ;
+            ->setLabel('Nombre');
 
         $component = $pageName === Action::DETAIL
             ? ArrayField::new('members')
-            : AssociationField::new('members')
-        ;
+            : AssociationField::new('members');
 
         yield $component
-            ->setLabel('Miembros')
-        ;
+            ->setLabel('Miembros');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\Voter;
 
 use App\Entity\Secret;
@@ -8,11 +10,10 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use function in_array;
+
 class SecretVoter extends Voter
 {
-    /**
-     * @var SecretRepository
-     */
     private SecretRepository $secretRepository;
 
     public function __construct(SecretRepository $secretRepository)
@@ -20,16 +21,22 @@ class SecretVoter extends Voter
         $this->secretRepository = $secretRepository;
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function supports($attribute, $subject)
     {
         return $attribute === 'SECRET_SHOW';
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         $user = $token->getUser();
 
-        if (!$user instanceof UserInterface) {
+        if (! $user instanceof UserInterface) {
             return false;
         }
 

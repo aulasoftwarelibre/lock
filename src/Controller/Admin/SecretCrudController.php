@@ -25,8 +25,7 @@ class SecretCrudController extends AbstractCrudController
         return $crud
             ->setEntityPermission('SECRET_SHOW')
             ->setEntityLabelInSingular('Contraseña')
-            ->setEntityLabelInPlural('Contraseñas')
-        ;
+            ->setEntityLabelInPlural('Contraseñas');
     }
 
     public function configureActions(Actions $actions): Actions
@@ -36,10 +35,8 @@ class SecretCrudController extends AbstractCrudController
             ->setPermission(Action::EDIT, 'ROLE_ADMIN')
             ->setPermission(Action::DETAIL, 'ROLE_USER')
             ->setPermission(Action::NEW, 'ROLE_ADMIN')
-            ->setPermission(Action::DELETE, 'ROLE_ADMIN')
-        ;
+            ->setPermission(Action::DELETE, 'ROLE_ADMIN');
     }
-
 
     /**
      * {@inheritdoc}
@@ -47,26 +44,21 @@ class SecretCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield TextField::new('site')
-            ->setLabel('Sitio web')
-        ;
+            ->setLabel('Sitio web');
 
         yield TextField::new('account')
-            ->setLabel('Usuario')
-        ;
+            ->setLabel('Usuario');
 
         yield TextField::new('password')
             ->setLabel('Contraseña')
-            ->hideOnIndex()
-        ;
+            ->hideOnIndex();
 
         $component = $pageName === Action::DETAIL || $pageName === Action::INDEX
             ? ArrayField::new('organizations')
-            : AssociationField::new('organizations')
-        ;
+            : AssociationField::new('organizations');
 
         yield $component
             ->setLabel('Grupos')
-            ->setRequired(true)
-        ;
+            ->setRequired(true);
     }
 }

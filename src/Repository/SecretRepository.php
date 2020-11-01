@@ -34,8 +34,7 @@ class SecretRepository extends ServiceEntityRepository
 
         $result = $qb
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
 
         return $result instanceof Secret;
     }
