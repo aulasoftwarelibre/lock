@@ -12,19 +12,19 @@ ARG NODE_VERSION=14
 
 ###############################################
 # "node" stage
-FROM node:${NODE_VERSION} AS lock_node
-
-WORKDIR /srv/app
-
-COPY package.json yarn.lock webpack.config.js ./
-
-RUN set -eux; \
-    yarn install;
-
-COPY assets assets/
-
-RUN set -eux; \
-    yarn run build --mode production
+#FROM node:${NODE_VERSION} AS lock_node
+#
+#WORKDIR /srv/app
+#
+#COPY package.json yarn.lock webpack.config.js ./
+#
+#RUN set -eux; \
+#    yarn install;
+#
+#COPY assets assets/
+#
+#RUN set -eux; \
+#    yarn run build --mode production
 
 ###############################################
 # "php" stage
@@ -116,7 +116,7 @@ COPY config config/
 COPY migrations migrations/
 COPY public public/
 COPY assets assets/
-COPY --from=lock_node /srv/app/public/build public/build/
+# COPY --from=lock_node /srv/app/public/build public/build/
 COPY templates templates/
 COPY translations translations/
 COPY src src/
