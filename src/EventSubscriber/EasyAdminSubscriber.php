@@ -10,8 +10,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-use function dump;
-
 class EasyAdminSubscriber implements EventSubscriberInterface
 {
     private MessageBusInterface $messageBus;
@@ -24,7 +22,6 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     public function sendQrCodeToUser(AfterEntityPersistedEvent $event): void
     {
         $entity = $event->getEntityInstance();
-        dump($entity);
 
         if (! $entity instanceof User) {
             return;
