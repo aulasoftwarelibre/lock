@@ -22,7 +22,9 @@ class UserCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityPermission('USER_EDIT');
+            ->setEntityPermission('USER_EDIT')
+            ->setEntityLabelInSingular('Usuario')
+            ->setEntityLabelInPlural('Usuarios');
     }
 
     public function configureActions(Actions $actions): Actions
@@ -37,10 +39,14 @@ class UserCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield TextField::new('username')
+            ->setLabel('Usuario')
             ->onlyWhenCreating();
 
-        yield TextField::new('email');
+        yield TextField::new('email')
+            ->setLabel('Email');
+
         yield ChoiceField::new('roles')
+            ->setLabel('Roles')
             ->setPermission('ROLE_ADMIN')
             ->hideOnIndex()
             ->allowMultipleChoices()

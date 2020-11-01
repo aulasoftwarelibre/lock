@@ -25,7 +25,7 @@ class User implements UserInterface, TwoFactorInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private ?int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -33,7 +33,7 @@ class User implements UserInterface, TwoFactorInterface
      * @Assert\NotBlank()
      * @Assert\Length(min=1, max=180)
      */
-    private ?string $username;
+    private ?string $username = null;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -42,7 +42,7 @@ class User implements UserInterface, TwoFactorInterface
      * @Assert\Length(min=1, max=180)
      * @Assert\Email()
      */
-    private ?string $email;
+    private ?string $email = null;
 
     /**
      * @ORM\Column(type="json")
