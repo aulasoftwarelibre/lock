@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\EventSubscriber;
 
 use App\Entity\User;
 use App\Message\SendNewActivationCodeMessage;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+
+use function dump;
 
 class EasyAdminSubscriber implements EventSubscriberInterface
 {
@@ -17,12 +21,12 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         $this->messageBus = $messageBus;
     }
 
-    public function sendQrCodeToUser(AfterEntityPersistedEvent $event)
+    public function sendQrCodeToUser(AfterEntityPersistedEvent $event): void
     {
         $entity = $event->getEntityInstance();
         dump($entity);
 
-        if (!$entity instanceof User) {
+        if (! $entity instanceof User) {
             return;
         }
 
@@ -31,10 +35,11 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents()
     {
-        return [
-            AfterEntityPersistedEvent::class => 'sendQrCodeToUser',
-        ];
+        return [AfterEntityPersistedEvent::class => 'sendQrCodeToUser'];
     }
 }

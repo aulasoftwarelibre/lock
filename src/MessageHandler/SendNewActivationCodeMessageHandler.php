@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\MessageHandler;
 
 use App\Entity\User;
@@ -27,21 +29,20 @@ final class SendNewActivationCodeMessageHandler implements MessageHandlerInterfa
         GoogleAuthenticatorInterface $googleAuthenticator,
         string $assetsPath,
         string $mailFrom
-    )
-    {
-        $this->em = $em;
-        $this->userRepository = $userRepository;
-        $this->mailer = $mailer;
+    ) {
+        $this->em                  = $em;
+        $this->userRepository      = $userRepository;
+        $this->mailer              = $mailer;
         $this->googleAuthenticator = $googleAuthenticator;
-        $this->assetsPath = $assetsPath;
-        $this->mailFrom = $mailFrom;
+        $this->assetsPath          = $assetsPath;
+        $this->mailFrom            = $mailFrom;
     }
 
-    public function __invoke(SendNewActivationCodeMessage $message)
+    public function __invoke(SendNewActivationCodeMessage $message): void
     {
         $user = $this->userRepository->findOneBy(['username' => $message->getUsername()]);
 
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             return;
         }
 
@@ -62,16 +63,11 @@ final class SendNewActivationCodeMessageHandler implements MessageHandlerInterfa
             ->embedFromPath($this->assetsPath . '/images/icon_twitter.png', 'twitter')
             ->embedFromPath($this->assetsPath . '/images/icon_youtube.png', 'youtube')
             ->htmlTemplate('mail/qrcode_message.html.twig')
-            ->context([
-                'user' => $user,
-            ]);
+            ->context(['user' => $user]);
 
         $this->mailer->send($email);
     }
 
-    /**
-     * @param User $user
-     */
     private function revokeUserSecrets(User $user): void
     {
         $user->setGoogleActivationSecret(
