@@ -1,0 +1,3 @@
+scheb_two_factor:
+    security_tokens:
+        - Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken
