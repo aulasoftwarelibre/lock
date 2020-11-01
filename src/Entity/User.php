@@ -151,6 +151,11 @@ class User implements UserInterface, TwoFactorInterface
         return $this->username;
     }
 
+    public function isGoogleAuthenticatorActivated(): bool
+    {
+        return ! (bool) $this->googleActivationSecret;
+    }
+
     public function getGoogleAuthenticatorSecret(): ?string
     {
         return $this->googleAuthenticatorSecret;
