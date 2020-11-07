@@ -7,17 +7,25 @@ namespace App\Controller\Admin;
 use App\Entity\Secret;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 
 class SecretCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
         return Secret::class;
+    }
+
+    public function configureAssets(Assets $assets): Assets
+    {
+        return $assets
+            ->addJsFile('js/admin/select-input.js');
     }
 
     public function configureCrud(Crud $crud): Crud
@@ -43,14 +51,16 @@ class SecretCrudController extends AbstractCrudController
      */
     public function configureFields(string $pageName): iterable
     {
-        yield TextField::new('site')
+        yield UrlField::new('site')
             ->setLabel('Sitio web');
 
         yield TextField::new('account')
-            ->setLabel('Usuario');
+            ->setLabel('Usuario')
+            ->setTemplatePath('admin/fields/pre.html.twig');
 
         yield TextField::new('password')
             ->setLabel('Contraseña')
+            ->setTemplatePath('admin/fields/pre.html.twig')
             ->hideOnIndex();
 
         $component = $pageName === Action::DETAIL || $pageName === Action::INDEX
