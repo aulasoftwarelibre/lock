@@ -9,6 +9,10 @@ on:
             - v[0-9]+.[0-9]+.[0-9]+
     pull_request: ~
 
+
+env:
+    DOCKER_BUILDKIT: 1
+
 jobs:
     quality:
         name: Quality
@@ -98,7 +102,7 @@ jobs:
                         ghcr.io/aulasoftwarelibre/lock-php:latest
                         ghcr.io/aulasoftwarelibre/lock-php:${{ steps.extract_tag.outputs.tag }}
                     cache-from: type=local,src=/tmp/.buildx-cache
-                    cache-to: type=local,dest=/tmp/.buildx-cache
+                    cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
             -
                 name: Build and push httpd
                 uses: docker/build-push-action@v2
@@ -111,4 +115,4 @@ jobs:
                         ghcr.io/aulasoftwarelibre/lock-httpd:latest
                         ghcr.io/aulasoftwarelibre/lock-httpd:${{ steps.extract_tag.outputs.tag }}
                     cache-from: type=local,src=/tmp/.buildx-cache
-                    cache-to: type=local,dest=/tmp/.buildx-cache
+                    cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
