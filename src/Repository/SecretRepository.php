@@ -29,8 +29,8 @@ class SecretRepository extends ServiceEntityRepository
             ->leftJoin('p.members', 'm')
             ->where('s = :secret')
             ->andWhere('m = :member')
-            ->setParameter('secret', $secret)
-            ->setParameter('member', $user);
+            ->setParameter('secret', $secret->getId())
+            ->setParameter('member', $user->getId());
 
         $result = $qb
             ->getQuery()
@@ -38,33 +38,4 @@ class SecretRepository extends ServiceEntityRepository
 
         return $result instanceof Secret;
     }
-
-    // /**
-    //  * @return Secret[] Returns an array of Secret objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Secret
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
