@@ -21,6 +21,7 @@ security:
             guard:
                 authenticators:
                     - 'uco_oauth2_client.security_guard.uco_authenticator'
+            user_checker: 'App\Security\Checker\TwoFactorChecker'
             anonymous: true
             lazy: true
             provider: app_user_provider
