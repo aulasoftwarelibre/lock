@@ -11,9 +11,6 @@
     "beberlei/assert": {
         "version": "v3.2.7"
     },
-    "brick/math": {
-        "version": "0.9.1"
-    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99"
     },
@@ -58,6 +55,9 @@
     },
     "doctrine/dbal": {
         "version": "2.12.0"
+    },
+    "doctrine/deprecations": {
+        "version": "v0.5.3"
     },
     "doctrine/doctrine-bundle": {
         "version": "2.0",
@@ -132,9 +132,6 @@
     "felixfbecker/language-server-protocol": {
         "version": "v1.5.0"
     },
-    "fgrosse/phpasn1": {
-        "version": "v2.2.0"
-    },
     "guzzlehttp/guzzle": {
         "version": "7.2.0"
     },
@@ -146,6 +143,9 @@
     },
     "informaticauco/oauth2-uco": {
         "version": "0.5.0"
+    },
+    "informaticauco/oauth2-uco-bundle": {
+        "version": "0.1.1"
     },
     "khanamiryan/qrcode-detector-decoder": {
         "version": "1.0.3"
@@ -167,6 +167,9 @@
     },
     "laminas/laminas-zendframework-bridge": {
         "version": "1.1.1"
+    },
+    "lcobucci/clock": {
+        "version": "2.0.0"
     },
     "lcobucci/jwt": {
         "version": "3.3.3"
@@ -228,9 +231,6 @@
     "psr/http-client": {
         "version": "1.0.1"
     },
-    "psr/http-factory": {
-        "version": "1.0.1"
-    },
     "psr/http-message": {
         "version": "1.0.1"
     },
@@ -261,26 +261,8 @@
             "config/packages/sensio_framework_extra.yaml"
         ]
     },
-    "sensiolabs/security-checker": {
-        "version": "4.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "4.0",
-            "ref": "160c9b600564faa1224e8f387d49ef13ceb8b793"
-        },
-        "files": [
-            "config/packages/security_checker.yaml"
-        ]
-    },
     "slevomat/coding-standard": {
         "version": "6.4.1"
-    },
-    "spomky-labs/aes-key-wrap": {
-        "version": "v6.0.0"
-    },
-    "spomky-labs/base64url": {
-        "version": "v2.0.3"
     },
     "spomky-labs/otphp": {
         "version": "v10.0.1"
@@ -708,12 +690,6 @@
     },
     "vimeo/psalm": {
         "version": "4.1.0"
-    },
-    "web-token/jwt-framework": {
-        "version": "v2.2.5"
-    },
-    "webimpress/safe-writer": {
-        "version": "2.1.0"
     },
     "webmozart/assert": {
         "version": "1.9.1"

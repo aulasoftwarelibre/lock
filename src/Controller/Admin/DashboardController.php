@@ -25,6 +25,7 @@ class DashboardController extends AbstractDashboardController
 
     /**
      * @Route("/admin", name="admin")
+     * @Route("/admin", name="homepage")
      */
     public function index(): Response
     {
