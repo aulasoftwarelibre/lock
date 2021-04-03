@@ -1,6 +1,8 @@
 {
+    "name": "aulasoftwarelibre/lock",
+    "description": "Password manager",
     "type": "project",
-    "license": "proprietary",
+    "license": "EUPL-1.2",
     "require": {
         "php": ">=7.4",
         "ext-ctype": "*",
