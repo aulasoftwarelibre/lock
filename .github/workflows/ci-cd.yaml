@@ -52,7 +52,6 @@ jobs:
 
             -   name: Quality
                 run: |
-                    vendor/bin/security-checker security:check
                     vendor/bin/psalm
                     vendor/bin/phpcs
     images:
