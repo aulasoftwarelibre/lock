@@ -19,6 +19,10 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class AddUserCommand extends Command
 {
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
+     * @var string
+     */
     protected static $defaultName = 'app:add-user';
 
     public function __construct(

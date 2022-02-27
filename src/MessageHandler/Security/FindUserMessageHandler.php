@@ -17,7 +17,7 @@ class FindUserMessageHandler implements MessageHandlerInterface
     ) {
     }
 
-    public function __invoke(FindUserMessage $findUserMessage)
+    public function __invoke(FindUserMessage $findUserMessage): User
     {
         $username = $findUserMessage->getUsername();
 
