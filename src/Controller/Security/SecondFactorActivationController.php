@@ -24,10 +24,10 @@ use function base64_encode;
 class SecondFactorActivationController extends AbstractController
 {
     public function __construct(
-        private BuilderInterface $defaultQrCodeBuilder,
-        private GoogleAuthenticatorInterface $googleAuthenticator,
-        private UserRepository $userRepository,
-        private EntityManagerInterface $em,
+        private readonly BuilderInterface $defaultQrCodeBuilder,
+        private readonly GoogleAuthenticatorInterface $googleAuthenticator,
+        private readonly UserRepository $userRepository,
+        private readonly EntityManagerInterface $em,
     ) {
     }
 

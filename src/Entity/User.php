@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -15,7 +16,7 @@ use function array_unique;
 
 #[UniqueEntity(fields: ['username'])]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User implements UserInterface, TwoFactorInterface
+class User implements UserInterface, TwoFactorInterface, Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

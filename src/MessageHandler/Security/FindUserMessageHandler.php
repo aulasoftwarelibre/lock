@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 class FindUserMessageHandler implements MessageHandlerInterface
 {
     public function __construct(
-        private UserRepository $userRepository,
+        private readonly UserRepository $userRepository,
     ) {
     }
 

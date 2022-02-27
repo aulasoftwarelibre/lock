@@ -8,11 +8,12 @@ use App\Repository\OrganizationUnitRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OrganizationUnitRepository::class)]
 #[ORM\Table]
-class OrganizationUnit
+class OrganizationUnit implements Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

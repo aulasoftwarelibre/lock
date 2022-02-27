@@ -3,6 +3,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Nette\Set\NetteSetList;
+use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SensiolabsSetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -29,4 +30,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES);
     $containerConfigurator->import(DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES);
     $containerConfigurator->import(SensiolabsSetList::FRAMEWORK_EXTRA_61);
+    $containerConfigurator->import(SetList::PHP_80);
+    $containerConfigurator->import(SetList::PHP_81);
 };

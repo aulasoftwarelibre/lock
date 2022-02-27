@@ -15,27 +15,14 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 final class SendNewActivationCodeMessageHandler implements MessageHandlerInterface
 {
-    private EntityManagerInterface $em;
-    private UserRepository $userRepository;
-    private MailerInterface $mailer;
-    private GoogleAuthenticatorInterface $googleAuthenticator;
-    private string $assetsPath;
-    private string $mailFrom;
-
     public function __construct(
-        EntityManagerInterface $em,
-        UserRepository $userRepository,
-        MailerInterface $mailer,
-        GoogleAuthenticatorInterface $googleAuthenticator,
-        string $assetsPath,
-        string $mailFrom
+        private readonly EntityManagerInterface $em,
+        private readonly UserRepository $userRepository,
+        private readonly MailerInterface $mailer,
+        private readonly GoogleAuthenticatorInterface $googleAuthenticator,
+        private readonly string $assetsPath,
+        private readonly string $mailFrom
     ) {
-        $this->em                  = $em;
-        $this->userRepository      = $userRepository;
-        $this->mailer              = $mailer;
-        $this->googleAuthenticator = $googleAuthenticator;
-        $this->assetsPath          = $assetsPath;
-        $this->mailFrom            = $mailFrom;
     }
 
     public function __invoke(SendNewActivationCodeMessage $message): void

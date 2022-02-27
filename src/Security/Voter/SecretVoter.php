@@ -14,8 +14,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class SecretVoter extends Voter
 {
     public function __construct(
-        private SecretRepository $secretRepository,
-        private AccessDecisionManagerInterface $decisionManager
+        private readonly SecretRepository $secretRepository,
+        private readonly AccessDecisionManagerInterface $decisionManager
     ) {
     }
 

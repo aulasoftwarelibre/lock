@@ -10,12 +10,10 @@ use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-use function in_array;
-
 class UserVoter extends Voter
 {
     public function __construct(
-        private AccessDecisionManagerInterface $decisionManager
+        private readonly AccessDecisionManagerInterface $decisionManager
     ) {
     }
 

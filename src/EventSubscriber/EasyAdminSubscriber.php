@@ -12,11 +12,8 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class EasyAdminSubscriber implements EventSubscriberInterface
 {
-    private MessageBusInterface $messageBus;
-
-    public function __construct(MessageBusInterface $messageBus)
+    public function __construct(private readonly MessageBusInterface $messageBus)
     {
-        $this->messageBus = $messageBus;
     }
 
     public function sendQrCodeToUser(AfterEntityPersistedEvent $event): void

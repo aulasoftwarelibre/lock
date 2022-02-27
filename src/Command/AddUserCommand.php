@@ -20,23 +20,14 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class AddUserCommand extends Command
 {
     protected static $defaultName = 'app:add-user';
-    private EntityManagerInterface $em;
-    private UserRepository $userRepository;
-    private MessageBusInterface $messageBus;
-    private GoogleAuthenticatorInterface $googleAuthenticator;
 
     public function __construct(
-        EntityManagerInterface $em,
-        UserRepository $userRepository,
-        GoogleAuthenticatorInterface $googleAuthenticator,
-        MessageBusInterface $messageBus
+        private readonly EntityManagerInterface $em,
+        private readonly UserRepository $userRepository,
+        private readonly GoogleAuthenticatorInterface $googleAuthenticator,
+        private readonly MessageBusInterface $messageBus
     ) {
         parent::__construct();
-
-        $this->em                  = $em;
-        $this->userRepository      = $userRepository;
-        $this->googleAuthenticator = $googleAuthenticator;
-        $this->messageBus          = $messageBus;
     }
 
     protected function configure(): void
@@ -60,7 +51,7 @@ class AddUserCommand extends Command
 
         $user = $this->userRepository->findOneBy(['username' => $username]);
 
-        if ($user) {
+        if ($user !== null) {
             $io->error('Username already exists');
 
             return Command::FAILURE;
