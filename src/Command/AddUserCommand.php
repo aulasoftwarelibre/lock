@@ -19,6 +19,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class AddUserCommand extends Command
 {
+    protected static $defaultName = 'app:add-user';
     private EntityManagerInterface $em;
     private UserRepository $userRepository;
     private MessageBusInterface $messageBus;
@@ -40,9 +41,7 @@ class AddUserCommand extends Command
 
     protected function configure(): void
     {
-        $this
-            ->setName('app:add-user')
-            ->setDescription('Create a new user')
+        $this->setDescription('Create a new user')
             ->addArgument('username', InputArgument::REQUIRED, 'Set username')
             ->addOption('admin', null, InputOption::VALUE_NONE, 'Set admin flag')
             ->addOption('super', null, InputOption::VALUE_NONE, 'Set super admin flag');

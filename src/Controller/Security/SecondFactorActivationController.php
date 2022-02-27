@@ -7,9 +7,8 @@ namespace App\Controller\Security;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Builder\BuilderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\QrCode\QrCodeGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
@@ -21,29 +20,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use function base64_encode;
 
-/**
- * @Route(path="/2fa_activation", name="2fa_login_activation", methods={"GET", "POST"})
- */
+#[Route(path: '/2fa_activation', name: '2fa_login_activation', methods: ['GET', 'POST'])]
 class SecondFactorActivationController extends AbstractController
 {
-    private QrCodeGenerator $qrCodeGenerator;
-    private UserRepository $userRepository;
-    private EntityManagerInterface $em;
-    private string $assetsPath;
-    private GoogleAuthenticatorInterface $googleAuthenticator;
-
     public function __construct(
-        QrCodeGenerator $qrCodeGenerator,
-        GoogleAuthenticatorInterface $googleAuthenticator,
-        UserRepository $userRepository,
-        EntityManagerInterface $em,
-        string $assetsPath
+        private BuilderInterface $defaultQrCodeBuilder,
+        private GoogleAuthenticatorInterface $googleAuthenticator,
+        private UserRepository $userRepository,
+        private EntityManagerInterface $em,
     ) {
-        $this->qrCodeGenerator     = $qrCodeGenerator;
-        $this->userRepository      = $userRepository;
-        $this->em                  = $em;
-        $this->assetsPath          = $assetsPath;
-        $this->googleAuthenticator = $googleAuthenticator;
     }
 
     public function __invoke(Request $request): Response
@@ -98,13 +83,12 @@ class SecondFactorActivationController extends AbstractController
 
     private function generateQrCode(User $user): string
     {
-        $qrCode = $this->qrCodeGenerator->getGoogleAuthenticatorQrCode($user);
-        $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH());
-        $qrCode->setLogoPath($this->assetsPath . '/images/logo-cuadrado-fondo-blanco.png');
-        $qrCode->setLogoHeight(100);
-        $qrCode->setLogoWidth(100);
+        $content = $this->googleAuthenticator->getQRContent($user);
+        $qrCode  = $this->defaultQrCodeBuilder
+            ->data($content)
+            ->build();
 
-        return base64_encode($qrCode->writeString());
+        return base64_encode($qrCode->getString());
     }
 
     private function createActivationForm(Request $request): FormInterface

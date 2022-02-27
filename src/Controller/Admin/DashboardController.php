@@ -10,28 +10,24 @@ use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
-    private CrudUrlGenerator $crudUrlGenerator;
-
-    public function __construct(CrudUrlGenerator $crudUrlGenerator)
-    {
-        $this->crudUrlGenerator = $crudUrlGenerator;
+    public function __construct(
+        private AdminUrlGenerator $adminUrlGenerator
+    ) {
     }
 
-    /**
-     * @Route("/admin", name="admin")
-     * @Route("/admin", name="homepage")
-     */
+    #[Route(path: '/admin', name: 'admin')]
+    #[Route(path: '/admin', name: 'homepage')]
     public function index(): Response
     {
-        $routeBuilder = $this->crudUrlGenerator->build();
+        $url = $this->adminUrlGenerator->setController(UserCrudController::class)->generateUrl();
 
-        return $this->redirect($routeBuilder->setController(UserCrudController::class)->generateUrl());
+        return $this->redirect($url);
     }
 
     public function configureDashboard(): Dashboard

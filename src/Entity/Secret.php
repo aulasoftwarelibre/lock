@@ -5,50 +5,44 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\SecretRepository;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=SecretRepository::class)
+#[UniqueEntity(fields: ['site', 'account'])]
+#[ORM\Entity(repositoryClass: SecretRepository::class)]
  *
- * @UniqueEntity(fields={"site", "account"})
- */
 class Secret
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     *
-     * @Assert\NotBlank()
-     * @Assert\Length(min=1, max=255)
-     */
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 1, max: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $site = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     *
-     * @Assert\NotBlank()
-     * @Assert\Length(min=1, max=255)
-     */
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 1, max: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $account = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     *
-     * @Assert\NotBlank()
-     * @Assert\Length(min=1, max=255)
-     */
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 1, max: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $password = null;
 
+    /** @var Collection<int, OrganizationUnit> */
+    #[ORM\ManyToMany(targetEntity: OrganizationUnit::class)]
+    private Collection $organizations;
     /**
      * @ORM\ManyToMany(targetEntity=OrganizationUnit::class)
      *

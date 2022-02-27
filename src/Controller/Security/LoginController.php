@@ -12,13 +12,10 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LoginController extends AbstractController
 {
-    /**
-     * @Route("/", name="login")
-     */
+    #[Route(path: '/', name: 'login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();
-
         if ($this->getUser() instanceof UserInterface) {
             return $this->redirectToRoute('admin');
         }

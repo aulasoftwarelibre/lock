@@ -5,42 +5,34 @@ declare(strict_types=1);
 namespace App\Security\Voter;
 
 use App\Entity\Secret;
+use App\Entity\User;
 use App\Repository\SecretRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\User\UserInterface;
-
-use function in_array;
 
 class SecretVoter extends Voter
 {
-    private SecretRepository $secretRepository;
-
-    public function __construct(SecretRepository $secretRepository)
-    {
-        $this->secretRepository = $secretRepository;
+    public function __construct(
+        private SecretRepository $secretRepository,
+        private AccessDecisionManagerInterface $decisionManager
+    ) {
     }
 
-    /**
-     * @inheritDoc
-     */
-    protected function supports($attribute, $subject)
+    protected function supports(string $attribute, mixed $subject): bool
     {
         return $attribute === 'SECRET_SHOW';
     }
 
-    /**
-     * @inheritDoc
-     */
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
-        if (! $user instanceof UserInterface) {
+        if (! $user instanceof User) {
             return false;
         }
 
-        if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+        if ($this->decisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 

@@ -5,3 +5,6 @@ scheb_two_factor:
         issuer: Locker
         window: 1
         template: security/2fa_form.html.twig
+
+    security_tokens:
+        - Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken
