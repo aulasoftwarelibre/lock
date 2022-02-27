@@ -1,0 +1,11 @@
+endroid_qr_code:
+    default:
+        writer: Endroid\QrCode\Writer\PngWriter
+        size: 200
+        margin: 10
+        encoding: 'UTF-8'
+        errorCorrectionLevel: 'medium'
+        roundBlockSizeMode: 'margin'
+        validateResult: false
+        logoPath: '%kernel.project_dir%/assets/images/logo-cuadrado-fondo-blanco.png'
+        logoResizeToWidth: 50

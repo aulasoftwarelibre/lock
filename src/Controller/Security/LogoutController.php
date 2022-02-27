@@ -7,12 +7,10 @@ namespace App\Controller\Security;
 use RuntimeException;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/logout", name="logout")
- */
+#[Route(path: '/logout', name: 'logout')]
 class LogoutController
 {
-    public function __invoke(): void
+    public function __invoke(): never
     {
         throw new RuntimeException('This method should not be called.');
     }

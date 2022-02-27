@@ -1,6 +1,6 @@
 {% extends '@EasyAdmin/page/login.html.twig' %}
 
-{% form_theme form 'bootstrap_4_layout.html.twig' %}
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
 
 {% block wrapper_wrapper %}
     {% set page_title = block('page_title') %}
@@ -33,16 +33,12 @@
 
         <section class="content">
             <p>Escanee el siguiente código con su aplicación móvil e introduzca el código OTP para activar su cuenta:</p>
-            <img width="200" src="data:image/png;base64,{{- qrcode -}}" alt="Código QR">
+            <div class="mx-auto w-50">
+                <img width="200" src="data:image/png;base64,{{- qrcode -}}" alt="Código QR">
+            </div>
             {{ form_start(form) }}
 
-            <div class="form-group field-code">
-                {{ form_label(form.code) }}
-                <div class="form-widget form-widget-with-icon">
-                    <i class="fa fa-fw fa-lock"></i>
-                    {{ form_widget(form.code) }}
-                </div>
-            </div>
+            {{ form_widget(form.code) }}
 
             <div class="form-group field-button">
                 <button type="submit" class="btn btn-primary btn-lg btn-block" onclick="this.form.submit();">{{ _submit_label }}</button>

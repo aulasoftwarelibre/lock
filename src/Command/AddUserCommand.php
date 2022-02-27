@@ -19,30 +19,24 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class AddUserCommand extends Command
 {
-    private EntityManagerInterface $em;
-    private UserRepository $userRepository;
-    private MessageBusInterface $messageBus;
-    private GoogleAuthenticatorInterface $googleAuthenticator;
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
+     * @var string
+     */
+    protected static $defaultName = 'app:add-user';
 
     public function __construct(
-        EntityManagerInterface $em,
-        UserRepository $userRepository,
-        GoogleAuthenticatorInterface $googleAuthenticator,
-        MessageBusInterface $messageBus
+        private readonly EntityManagerInterface $em,
+        private readonly UserRepository $userRepository,
+        private readonly GoogleAuthenticatorInterface $googleAuthenticator,
+        private readonly MessageBusInterface $messageBus
     ) {
         parent::__construct();
-
-        $this->em                  = $em;
-        $this->userRepository      = $userRepository;
-        $this->googleAuthenticator = $googleAuthenticator;
-        $this->messageBus          = $messageBus;
     }
 
     protected function configure(): void
     {
-        $this
-            ->setName('app:add-user')
-            ->setDescription('Create a new user')
+        $this->setDescription('Create a new user')
             ->addArgument('username', InputArgument::REQUIRED, 'Set username')
             ->addOption('admin', null, InputOption::VALUE_NONE, 'Set admin flag')
             ->addOption('super', null, InputOption::VALUE_NONE, 'Set super admin flag');
@@ -61,7 +55,7 @@ class AddUserCommand extends Command
 
         $user = $this->userRepository->findOneBy(['username' => $username]);
 
-        if ($user) {
+        if ($user !== null) {
             $io->error('Username already exists');
 
             return Command::FAILURE;

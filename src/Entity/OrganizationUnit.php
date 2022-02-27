@@ -8,36 +8,25 @@ use App\Repository\OrganizationUnitRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=OrganizationUnitRepository::class)
- * @ORM\Table()
- */
-class OrganizationUnit
+#[ORM\Entity(repositoryClass: OrganizationUnitRepository::class)]
+#[ORM\Table]
+class OrganizationUnit implements Stringable
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     *
-     * @Assert\NotBlank()
-     * @Assert\Length(min=1, max=255)
-     */
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 1, max: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name = null;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class)
-     *
-     * @Assert\Valid()
-     *
-     * @var Collection<int, User>
-     */
+    /** @var Collection<int, User> */
+    #[ORM\ManyToMany(targetEntity: User::class)]
     private Collection $members;
 
     public function __construct()
@@ -68,7 +57,7 @@ class OrganizationUnit
     }
 
     /**
-     * @return Collection|User[]
+     * @psalm-return Collection<int, User>
      */
     public function getMembers(): Collection
     {

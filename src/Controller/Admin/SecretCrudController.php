@@ -12,8 +12,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class SecretCrudController extends AbstractCrudController
 {
@@ -70,5 +73,17 @@ class SecretCrudController extends AbstractCrudController
         yield $component
             ->setLabel('Grupos')
             ->setRequired(true);
+
+        yield TextareaField::new('imageFile')
+            ->setLabel('Código QR')
+            ->setRequired(false)
+            ->setFormType(VichImageType::class)
+            ->onlyOnForms();
+
+        yield ImageField::new('image.name')
+            ->setLabel('Código QR')
+            ->setBasePath('/images/codes')
+            ->setCssClass('ea-vich-image')
+            ->onlyOnDetail();
     }
 }

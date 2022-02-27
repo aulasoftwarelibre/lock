@@ -7,25 +7,23 @@ namespace App\Security\Voter;
 use App\Entity\OrganizationUnit;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-use function in_array;
-
 class OrganizationUnitVoter extends Voter
 {
-    /**
-     * @inheritDoc
-     */
-    protected function supports($attribute, $subject)
+    public function __construct(
+        private readonly AccessDecisionManagerInterface $decisionManager
+    ) {
+    }
+
+    protected function supports(string $attribute, mixed $subject): bool
     {
         return $attribute === 'ORGANIZATION_UNIT_MEMBER';
     }
 
-    /**
-     * @inheritDoc
-     */
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
@@ -33,7 +31,7 @@ class OrganizationUnitVoter extends Voter
             return false;
         }
 
-        if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+        if ($this->decisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 

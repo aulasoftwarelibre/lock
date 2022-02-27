@@ -7,56 +7,42 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use function array_unique;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- *
- * @UniqueEntity(fields={"username"})
- */
-class User implements UserInterface, TwoFactorInterface
+#[UniqueEntity(fields: ['username'])]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+class User implements UserInterface, TwoFactorInterface, Stringable
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     *
-     * @Assert\NotBlank()
-     * @Assert\Length(min=1, max=180)
-     */
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 1, max: 180)]
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private ?string $username = null;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     *
-     * @Assert\NotBlank()
-     * @Assert\Length(min=1, max=180)
-     * @Assert\Email()
-     */
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 1, max: 180)]
+    #[Assert\Email]
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private ?string $email = null;
 
-    /**
-     * @ORM\Column(type="json")
-     *
-     * @Assert\Choice({"ROLE_USER", "ROLE_ADMIN", "ROLE_SUPER_ADMIN"}, multiple=true)
-     *
-     * @var string[]
-     */
+    /** @var string[] */
+    #[Assert\Choice(multiple: true)]
+    #[ORM\Column(type: 'json')]
     private array $roles = [];
 
-    /** @ORM\Column(name="googleAuthenticatorSecret", type="string", nullable=true) */
+    #[ORM\Column(name: 'googleAuthenticatorSecret', type: 'string', nullable: true)]
     private ?string $googleAuthenticatorSecret;
 
-    /** @ORM\Column(name="googleActivationSecret", type="string", nullable=true) */
+    #[ORM\Column(name: 'googleActivationSecret', type: 'string', nullable: true)]
     private ?string $googleActivationSecret;
 
     public function __toString(): string
@@ -77,6 +63,11 @@ class User implements UserInterface, TwoFactorInterface
     public function getUsername(): string
     {
         return (string) $this->username;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->getUsername();
     }
 
     public function setUsername(string $username): self
