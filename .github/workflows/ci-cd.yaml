@@ -33,7 +33,7 @@ jobs:
                     extensions: "json,openssl,mbstring,xml,ctype,iconv,intl"
                     ini-values: "memory_limit=-1"
                     php-version: "${{ matrix.php }}"
-                    tools: composer, prestissimo
+                    tools: composer:v2, prestissimo, flex
 
             -   name: Determine composer cache directory
                 id: composer-cache
