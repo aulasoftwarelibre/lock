@@ -4,3 +4,8 @@ twig:
         '%kernel.project_dir%/assets/styles': css
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    default_path: '%kernel.project_dir%/templates'
+
+when@test:
+    twig:
+        strict_variables: true
