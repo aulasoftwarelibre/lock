@@ -6,8 +6,9 @@
     <arg name="parallel" value="80"/>
     <arg name="cache" value="./var/.php_cs-cache"/>
     <arg name="colors"/>
-
     <arg value="nps"/>
+
+    <rule ref="PSR12"/>
 
     <file>src/</file>
     <file>tests/</file>
