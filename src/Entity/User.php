@@ -35,7 +35,7 @@ class User implements UserInterface, TwoFactorInterface, Stringable
     private ?string $email = null;
 
     /** @var string[] */
-    #[Assert\Choice(multiple: true)]
+    #[Assert\Choice(['ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'], multiple: true)]
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
