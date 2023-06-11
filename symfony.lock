@@ -195,9 +195,6 @@
     "nikic/php-parser": {
         "version": "v4.10.2"
     },
-    "openlss/lib-array2xml": {
-        "version": "1.0.0"
-    },
     "paragonie/constant_time_encoding": {
         "version": "v2.3.0"
     },
@@ -254,18 +251,6 @@
     },
     "sebastian/diff": {
         "version": "4.0.4"
-    },
-    "sensio/framework-extra-bundle": {
-        "version": "5.2",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "5.2",
-            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
-        },
-        "files": [
-            "config/packages/sensio_framework_extra.yaml"
-        ]
     },
     "slevomat/coding-standard": {
         "version": "6.4.1"
@@ -676,8 +661,5 @@
     },
     "webmozart/assert": {
         "version": "1.9.1"
-    },
-    "webmozart/path-util": {
-        "version": "2.3.0"
     }
 }
