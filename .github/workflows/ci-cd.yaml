@@ -33,7 +33,7 @@ jobs:
                     extensions: "json,openssl,mbstring,xml,ctype,iconv,intl"
                     ini-values: "memory_limit=-1"
                     php-version: "${{ matrix.php }}"
-                    tools: composer:v2, prestissimo, flex
+                    tools: composer:v2, flex
 
             -   name: Determine composer cache directory
                 id: composer-cache
@@ -61,7 +61,7 @@ jobs:
         steps:
             -
                 name: Checkout
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
             -
                 name: Set up QEMU
                 uses: docker/setup-qemu-action@v1
