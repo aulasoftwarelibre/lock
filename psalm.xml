@@ -5,6 +5,7 @@
     allowStringToStandInForClass="false">
     <issueHandlers>
         <LessSpecificReturnType errorLevel="info" />
+        <MissingTemplateParam errorLevel="suppress" />
     </issueHandlers>
     <plugins>
         <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">

@@ -21,7 +21,7 @@ final class SendNewActivationCodeMessageHandler implements MessageHandlerInterfa
         private readonly MailerInterface $mailer,
         private readonly GoogleAuthenticatorInterface $googleAuthenticator,
         private readonly string $assetsPath,
-        private readonly string $mailFrom
+        private readonly string $mailFrom,
     ) {
     }
 
@@ -58,10 +58,10 @@ final class SendNewActivationCodeMessageHandler implements MessageHandlerInterfa
     private function revokeUserSecrets(User $user): void
     {
         $user->setGoogleActivationSecret(
-            $this->googleAuthenticator->generateSecret()
+            $this->googleAuthenticator->generateSecret(),
         );
         $user->setGoogleAuthenticatorSecret(
-            $this->googleAuthenticator->generateSecret()
+            $this->googleAuthenticator->generateSecret(),
         );
         $this->em->flush();
     }

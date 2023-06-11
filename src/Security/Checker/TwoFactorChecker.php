@@ -11,10 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class TwoFactorChecker implements UserCheckerInterface
 {
-    /**
-     * @inheritDoc
-     */
-    public function checkPreAuth(UserInterface $user)
+    public function checkPreAuth(UserInterface $user): void
     {
         if (! $user instanceof User) {
             return;
@@ -25,10 +22,7 @@ final class TwoFactorChecker implements UserCheckerInterface
         }
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function checkPostAuth(UserInterface $user)
+    public function checkPostAuth(UserInterface $user): void
     {
         // TODO: Implement checkPostAuth() method.
     }

@@ -18,12 +18,12 @@ class OrganizationUnit implements Stringable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
+    private int|null $id = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 1, max: 255)]
     #[ORM\Column(type: 'string', length: 255)]
-    private ?string $name = null;
+    private string|null $name = null;
 
     /** @var Collection<int, User> */
     #[ORM\ManyToMany(targetEntity: User::class)]
@@ -39,12 +39,12 @@ class OrganizationUnit implements Stringable
         return (string) $this->name;
     }
 
-    public function getId(): ?int
+    public function getId(): int|null
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string|null
     {
         return $this->name;
     }
@@ -56,9 +56,7 @@ class OrganizationUnit implements Stringable
         return $this;
     }
 
-    /**
-     * @psalm-return Collection<int, User>
-     */
+    /** @psalm-return Collection<int, User> */
     public function getMembers(): Collection
     {
         return $this->members;

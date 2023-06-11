@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class OrganizationUnitVoter extends Voter
 {
     public function __construct(
-        private readonly AccessDecisionManagerInterface $decisionManager
+        private readonly AccessDecisionManagerInterface $decisionManager,
     ) {
     }
 

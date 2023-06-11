@@ -15,7 +15,7 @@ class SecretVoter extends Voter
 {
     public function __construct(
         private readonly SecretRepository $secretRepository,
-        private readonly AccessDecisionManagerInterface $decisionManager
+        private readonly AccessDecisionManagerInterface $decisionManager,
     ) {
     }
 
