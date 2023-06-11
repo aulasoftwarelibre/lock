@@ -50,7 +50,7 @@ class SecretCrudController extends AbstractCrudController
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function configureFields(string $pageName): iterable
     {

@@ -25,12 +25,12 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         }
 
         $this->messageBus->dispatch(
-            new SendNewActivationCodeMessage($entity->getUsername())
+            new SendNewActivationCodeMessage($entity->getUsername()),
         );
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents(): array
     {

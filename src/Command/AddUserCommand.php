@@ -25,7 +25,7 @@ class AddUserCommand extends Command
         private readonly EntityManagerInterface $em,
         private readonly UserRepository $userRepository,
         private readonly GoogleAuthenticatorInterface $googleAuthenticator,
-        private readonly MessageBusInterface $messageBus
+        private readonly MessageBusInterface $messageBus,
     ) {
         parent::__construct();
     }
@@ -76,7 +76,7 @@ class AddUserCommand extends Command
         $this->em->flush();
 
         $this->messageBus->dispatch(
-            new SendNewActivationCodeMessage($username)
+            new SendNewActivationCodeMessage($username),
         );
 
         $io->success('User was created.');

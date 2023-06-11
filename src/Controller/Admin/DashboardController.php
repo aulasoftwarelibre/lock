@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class DashboardController extends AbstractDashboardController
 {
     public function __construct(
-        private readonly AdminUrlGenerator $adminUrlGenerator
+        private readonly AdminUrlGenerator $adminUrlGenerator,
     ) {
     }
 
@@ -37,7 +37,7 @@ class DashboardController extends AbstractDashboardController
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function configureMenuItems(): iterable
     {

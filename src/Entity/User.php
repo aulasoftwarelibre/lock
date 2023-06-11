@@ -21,18 +21,18 @@ class User implements UserInterface, TwoFactorInterface, Stringable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
+    private int|null $id = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 1, max: 180)]
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private ?string $username = null;
+    private string|null $username = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 1, max: 180)]
     #[Assert\Email]
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private ?string $email = null;
+    private string|null $email = null;
 
     /** @var string[] */
     #[Assert\Choice(['ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'], multiple: true)]
@@ -40,17 +40,17 @@ class User implements UserInterface, TwoFactorInterface, Stringable
     private array $roles = [];
 
     #[ORM\Column(name: 'googleAuthenticatorSecret', type: 'string', nullable: true)]
-    private ?string $googleAuthenticatorSecret;
+    private string|null $googleAuthenticatorSecret;
 
     #[ORM\Column(name: 'googleActivationSecret', type: 'string', nullable: true)]
-    private ?string $googleActivationSecret;
+    private string|null $googleActivationSecret;
 
     public function __toString(): string
     {
         return (string) $this->username;
     }
 
-    public function getId(): ?int
+    public function getId(): int|null
     {
         return $this->id;
     }
@@ -77,7 +77,7 @@ class User implements UserInterface, TwoFactorInterface, Stringable
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string|null
     {
         return $this->email;
     }
@@ -89,9 +89,7 @@ class User implements UserInterface, TwoFactorInterface, Stringable
         return $this;
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -101,9 +99,7 @@ class User implements UserInterface, TwoFactorInterface, Stringable
         return array_unique($roles);
     }
 
-    /**
-     * @param string[] $roles
-     */
+    /** @param string[] $roles */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -111,23 +107,17 @@ class User implements UserInterface, TwoFactorInterface, Stringable
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
+    /** @see UserInterface */
     public function getPassword(): void
     {
     }
 
-    /**
-     * @see UserInterface
-     */
+    /** @see UserInterface */
     public function getSalt(): void
     {
     }
 
-    /**
-     * @see UserInterface
-     */
+    /** @see UserInterface */
     public function eraseCredentials(): void
     {
     }
@@ -147,7 +137,7 @@ class User implements UserInterface, TwoFactorInterface, Stringable
         return ! (bool) $this->googleActivationSecret;
     }
 
-    public function getGoogleAuthenticatorSecret(): ?string
+    public function getGoogleAuthenticatorSecret(): string|null
     {
         return $this->googleAuthenticatorSecret;
     }
@@ -159,12 +149,12 @@ class User implements UserInterface, TwoFactorInterface, Stringable
         return $this;
     }
 
-    public function getGoogleActivationSecret(): ?string
+    public function getGoogleActivationSecret(): string|null
     {
         return $this->googleActivationSecret;
     }
 
-    public function setGoogleActivationSecret(?string $googleActivationSecret): void
+    public function setGoogleActivationSecret(string|null $googleActivationSecret): void
     {
         $this->googleActivationSecret = $googleActivationSecret;
     }

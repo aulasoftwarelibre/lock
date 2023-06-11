@@ -25,30 +25,29 @@ class Secret
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
+    private int|null $id = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 1, max: 255)]
     #[ORM\Column(type: 'string', length: 255)]
-    private ?string $site = null;
+    private string|null $site = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 1, max: 255)]
     #[ORM\Column(type: 'string', length: 255)]
-    private ?string $account = null;
+    private string|null $account = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 1, max: 255)]
     #[ORM\Column(type: 'string', length: 255)]
-    private ?string $password = null;
+    private string|null $password = null;
 
     /** @var Collection<int, OrganizationUnit> */
     #[ORM\ManyToMany(targetEntity: OrganizationUnit::class)]
     private Collection $organizations;
 
     #[ORM\Column(type: 'datetime')]
-    private ?DateTimeInterface $updatedAt;
-
+    private DateTimeInterface|null $updatedAt;
 
     /**
      * @Vich\UploadableField(
@@ -78,12 +77,12 @@ class Secret
         $this->updatedAt     = new DateTimeImmutable();
     }
 
-    public function getId(): ?int
+    public function getId(): int|null
     {
         return $this->id;
     }
 
-    public function getSite(): ?string
+    public function getSite(): string|null
     {
         return $this->site;
     }
@@ -95,7 +94,7 @@ class Secret
         return $this;
     }
 
-    public function getAccount(): ?string
+    public function getAccount(): string|null
     {
         return $this->account;
     }
@@ -107,7 +106,7 @@ class Secret
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string|null
     {
         return $this->password;
     }
@@ -119,9 +118,7 @@ class Secret
         return $this;
     }
 
-    /**
-     * @return Collection<int, OrganizationUnit>
-     */
+    /** @return Collection<int, OrganizationUnit> */
     public function getOrganizations(): Collection
     {
         return $this->organizations;
@@ -150,7 +147,7 @@ class Secret
      * must be able to accept an instance of 'File' as the bundle will inject one here
      * during Doctrine hydration.
      */
-    public function setImageFile(?File $image = null): void
+    public function setImageFile(File|null $image = null): void
     {
         $this->imageFile = $image;
 
@@ -163,7 +160,7 @@ class Secret
         $this->updatedAt = new DateTimeImmutable();
     }
 
-    public function getImageFile(): ?File
+    public function getImageFile(): File|null
     {
         return $this->imageFile;
     }
