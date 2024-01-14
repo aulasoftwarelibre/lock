@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\HiddenField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -28,12 +29,16 @@ class SecretCrudController extends AbstractCrudController
     public function configureAssets(Assets $assets): Assets
     {
         return $assets
+            ->addJsFile('https://unpkg.com/@otplib/preset-browser@^12.0.0/buffer.js')
+            ->addJsFile('https://unpkg.com/@otplib/preset-browser@^12.0.0/index.js')
+            ->addJsFile('js/admin/otplib.js')
             ->addJsFile('js/admin/select-input.js');
     }
 
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
+            ->showEntityActionsInlined()
             ->setEntityPermission('SECRET_SHOW')
             ->setEntityLabelInSingular('Contraseña')
             ->setEntityLabelInPlural('Contraseñas');
@@ -84,6 +89,10 @@ class SecretCrudController extends AbstractCrudController
             ->setLabel('Código QR')
             ->setBasePath('/images/codes')
             ->setCssClass('ea-vich-image')
+            ->onlyOnDetail();
+
+        yield HiddenField::new('secret')
+            ->setTemplatePath('admin/fields/secret.html.twig')
             ->onlyOnDetail();
     }
 }

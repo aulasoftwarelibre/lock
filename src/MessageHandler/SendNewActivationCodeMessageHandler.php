@@ -11,9 +11,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-final class SendNewActivationCodeMessageHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+final class SendNewActivationCodeMessageHandler
 {
     public function __construct(
         private readonly EntityManagerInterface $em,

@@ -42,6 +42,9 @@ class Secret
     #[ORM\Column(type: 'string', length: 255)]
     private string|null $password = null;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private string|null $secret = null;
+
     /** @var Collection<int, OrganizationUnit> */
     #[ORM\ManyToMany(targetEntity: OrganizationUnit::class)]
     private Collection $organizations;
@@ -175,5 +178,17 @@ class Secret
     public function getImage(): EmbeddedFile
     {
         return $this->image;
+    }
+
+    public function getSecret(): string|null
+    {
+        return $this->secret;
+    }
+
+    public function setSecret(string|null $secret): self
+    {
+        $this->secret = $secret;
+
+        return $this;
     }
 }
