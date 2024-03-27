@@ -40,7 +40,7 @@ class OrganizationUnitVoter extends Voter
         }
 
         return $subject->getMembers()->filter(
-            static fn (User $member) => $member->getUsername() === $user->getUsername()
+            static fn (User $member) => $member->getUsername() === $user->getUsername(),
         )->count() !== 0;
     }
 }

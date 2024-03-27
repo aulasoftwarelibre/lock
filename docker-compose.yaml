@@ -1,0 +1,15 @@
+services:
+    db:
+        image: mariadb:10.5.1
+        ports:
+            - 3306:3306
+        volumes:
+            - ./var/data:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=mysql
+            - MYSQL_DATABASE=lock
+    smtp:
+        image: axllent/mailpit
+        ports:
+            - 8025:8025
+            - 1025:1025

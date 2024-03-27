@@ -17,12 +17,12 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var public
 	setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX var public
 
-    if [ -z "$SYMFONY_DECRYPTION_SECRET" ]; then
-        echo "Define SYMFONY_DECRYPTION_SECRET to decrypt secrets"
-        exit 1
-	fi
+  if [ -z "$SYMFONY_DECRYPTION_SECRET" ]; then
+      echo "Define SYMFONY_DECRYPTION_SECRET to decrypt secrets"
+      exit 1
+  fi
 
-    bin/console secrets:decrypt-to-local --force --env=prod
+  bin/console secrets:decrypt-to-local --force --env=prod
 
 	echo "Waiting for db to be ready..."
 	ATTEMPTS_LEFT_TO_REACH_DATABASE=60
