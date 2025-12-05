@@ -38,6 +38,10 @@ RUN apk add --no-cache \
 	gettext \
 	git \
 	jq \
+	openssl \
+	ca-certificates \
+	procps \
+	netcat-openbsd \
 	;
 
 ARG APCU_VERSION=5.1.18
@@ -80,11 +84,18 @@ RUN set -eux; \
 	\
 	apk del .build-deps
 
-RUN if grep -q "SECLEVEL=2" /etc/ssl/openssl.cnf; then \
-        sed -i 's/SECLEVEL=2/SECLEVEL=1/g' /etc/ssl/openssl.cnf; \
+RUN if [ -f /etc/ssl/openssl.cnf ]; then \
+      if grep -q "SECLEVEL" /etc/ssl/openssl.cnf 2>/dev/null; then \
+        sed -i 's/SECLEVEL=2/SECLEVEL=1/g' /etc/ssl/openssl.cnf || true; \
+      else \
+        printf "\n# added to allow legacy DH for legacy SMTP servers (temporary)\n[openssl_init]\nopenssl_conf = default_conf\n\n[default_conf]\nssl_conf = ssl_sect\n\n[ssl_sect]\nsystem_default = system_default_sect\n\n[system_default_sect]\nCipherString = DEFAULT@SECLEVEL=1\n" >> /etc/ssl/openssl.cnf; \
+      fi; \
     else \
-        echo 'CipherString = DEFAULT@SECLEVEL=1' >> /etc/ssl/openssl.cnf; \
+      # si por alguna razón no existe el fichero, creamos uno mínimo
+      printf "[openssl_init]\nopenssl_conf = default_conf\n\n[default_conf]\nssl_conf = ssl_sect\n\n[ssl_sect]\nsystem_default = system_default_sect\n\n[system_default_sect]\nCipherString = DEFAULT@SECLEVEL=1\n" > /etc/ssl/openssl.cnf; \
     fi
+
+RUN update-ca-certificates || true
 
 RUN ln -s $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 COPY docker/php/conf.d/symfony.ini $PHP_INI_DIR/conf.d/symfony.ini
@@ -152,7 +163,7 @@ FROM httpd:${APACHE_VERSION} AS lock_httpd
 EXPOSE 80
 
 RUN apt-get update; \
-	apt-get install -y liblasso3 curl; \
+	apt-get install -y liblasso3 curl openssl ca-certificates; \
 	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
 	mkdir -p /srv/app/public/cache /srv/app/public/images
 
