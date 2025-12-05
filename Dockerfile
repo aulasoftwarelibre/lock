@@ -80,7 +80,9 @@ RUN set -eux; \
 	\
 	apk del .build-deps
 
-RUN sed -i 's/SECLEVEL=2/SECLEVEL=1/g' /etc/ssl/openssl.cnf
+RUN echo 'Wait for it...' \
+    && sed -i 's/CipherString = DEFAULT@SECLEVEL=2/CipherString = DEFAULT@SECLEVEL=1/g' /etc/ssl/openssl.cnf \
+    || echo 'CipherString = DEFAULT@SECLEVEL=1' >> /etc/ssl/openssl.cnf
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
