@@ -84,18 +84,10 @@ RUN set -eux; \
 	\
 	apk del .build-deps
 
-RUN if [ -f /etc/ssl/openssl.cnf ]; then \
-      if grep -q "SECLEVEL" /etc/ssl/openssl.cnf 2>/dev/null; then \
-        sed -i 's/SECLEVEL=2/SECLEVEL=1/g' /etc/ssl/openssl.cnf || true; \
-      else \
-        printf "\n# added to allow legacy DH for legacy SMTP servers (temporary)\n[openssl_init]\nopenssl_conf = default_conf\n\n[default_conf]\nssl_conf = ssl_sect\n\n[ssl_sect]\nsystem_default = system_default_sect\n\n[system_default_sect]\nCipherString = DEFAULT@SECLEVEL=1\n" >> /etc/ssl/openssl.cnf; \
-      fi; \
-    else \
-      # si por alguna razón no existe el fichero, creamos uno mínimo
-      printf "[openssl_init]\nopenssl_conf = default_conf\n\n[default_conf]\nssl_conf = ssl_sect\n\n[ssl_sect]\nsystem_default = system_default_sect\n\n[system_default_sect]\nCipherString = DEFAULT@SECLEVEL=1\n" > /etc/ssl/openssl.cnf; \
-    fi
+RUN sed -i '/\[openssl_init\]/a ssl_conf = ssl_sect' /etc/ssl/openssl.cnf
 
-RUN update-ca-certificates || true
+RUN printf "\n[ssl_sect]\nsystem_default = system_default_sect\n\n[system_default_sect]\nCipherString = DEFAULT@SECLEVEL=1\n" >> /etc/ssl/openssl.cnf
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN ln -s $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
