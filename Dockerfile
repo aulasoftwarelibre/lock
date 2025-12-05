@@ -50,7 +50,6 @@ RUN set -eux; \
 	libzip-dev \
 	zlib-dev \
 	libxslt-dev \
-  postgresql-dev \
 	; \
 	\
 	docker-php-ext-configure gd  --with-jpeg; \
@@ -58,7 +57,7 @@ RUN set -eux; \
 	docker-php-ext-install -j$(nproc) \
 	gd \
 	intl \
-	pdo_pgsql \
+	pdo_mysql \
 	xsl \
 	zip \
 	; \
